@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import USAMap from "react-usa-map";
 import axios from 'axios';
-import states from '../components/map_constants'
+import states from '../constants/map_constants'
 
 function Homepage() {
     const [avgStateGunViolence, setAvgStateGunViolence] = useState([]);
     let stateAbbreviationConversion = new Map(states);
     const mapOfAverages = new Map();
+    const gunLawUrl = 'https://giffords.org/lawcenter/gun-laws/states/'
+
     useEffect(() => {
         async function fetchAvgData() {
             const url = 'https://datausa.io/api/data/?drilldowns=State&measures=Firearm Fatalities&year=2021';
@@ -24,7 +26,7 @@ function Homepage() {
         mapTitles.forEach((mapTitle) => {
             let fatalityValue = mapOfAverages.get(mapTitle.textContent);
             if (fatalityValue)
-                mapTitle.textContent = `The average Firearm Fatality for ${mapTitle.textContent} is ${String(fatalityValue)}`;
+                mapTitle.textContent = `Average Firearm Fatality for ${mapTitle.textContent}: ${String(fatalityValue)}`;
         })
     }
 
@@ -32,8 +34,9 @@ function Homepage() {
         let colorMap = {};
         if (avgStateGunViolence.length > 0) {
             avgStateGunViolence.forEach((st) => {
+                const stateName = st['State']
                 const opacity = Number((st['Firearm Fatalities'] / 100)).toFixed(4) * 4;
-                const abbreviation = stateAbbreviationConversion.get(st['State']);
+                const abbreviation = stateAbbreviationConversion.get(stateName);
                 if (abbreviation === null || abbreviation === '') {
                     console.log("ERROR", st)
                 }
@@ -41,9 +44,10 @@ function Homepage() {
                     let fill = `rgba(240 , 0, 0, ${opacity} )`
                     colorMap[abbreviation] = {
                         fill: fill,
+                        clickHandler: (event) => window.location.href=gunLawUrl+stateName
                     }
                 }
-                mapOfAverages.set(st['State'], st['Firearm Fatalities'].toFixed(4));
+                mapOfAverages.set(stateName, st['Firearm Fatalities'].toFixed(4));
             })
             giveStatesTitles();
         }
@@ -52,15 +56,19 @@ function Homepage() {
 
     return (
         <>
-            <div className="d-flex justify-content-center m-3">
-                <h1 className="text-align-center">Number of deaths due to firearms per 100,000 population in the US</h1>
+            <div className="m-3">
+                <h1 className="text-center">Number of deaths due to firearms per 100,000 population in the US</h1>
+                <h2 className="text-center text-muted">Hover over state to see fatality averages</h2>
+                <h2 className="text-center text-muted">Click on state to learn more about its gun laws</h2>
             </div> 
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center mt-4">
                 <USAMap 
                 customize={formatStates()} 
                 defaultFill = 'rgba(240 , 0, 0, 1)'
                 title='Number of deaths due to firearms per 100,000 population in the US' />
                 
+            </div>
+            <div className="container-fluid">
             </div>
         </>
     );
