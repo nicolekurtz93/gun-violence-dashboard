@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import USAMap from "react-usa-map";
 import axios from 'axios';
 import states from '../constants/map_constants'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.js';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import 'bootstrap/dist/css/bootstrap.css';
-import $ from "jquery";
 
 function Homepage() {
     const [avgStateGunViolence, setAvgStateGunViolence] = useState([]);
