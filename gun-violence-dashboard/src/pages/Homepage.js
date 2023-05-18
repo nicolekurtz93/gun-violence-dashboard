@@ -5,7 +5,7 @@ import states from '../constants/map_constants'
 
 function Homepage() {
     const [avgStateGunViolence, setAvgStateGunViolence] = useState([]);
-    const [yearForData, setYearForData] = useState([])
+    const [yearForData, setYearForData] = useState('2021')
     let stateAbbreviationConversion = new Map(states);
     const mapOfAverages = new Map();
     const gunLawUrl = 'https://giffords.org/lawcenter/gun-laws/states/'
@@ -36,20 +36,7 @@ function Homepage() {
         let colorMap = {};
         if (avgStateGunViolence.length > 0) {
             avgStateGunViolence.forEach((st) => {
-                const stateName = st['State']
-                const opacity = Number((st['Firearm Fatalities'] / 100)).toFixed(4) * 4;
-                const abbreviation = stateAbbreviationConversion.get(stateName);
-                if (abbreviation === null || abbreviation === '') {
-                    console.log("ERROR", st)
-                }
-                else {
-                    let fill = `rgba(240 , 0, 0, ${opacity} )`
-                    colorMap[abbreviation] = {
-                        fill: fill,
-                        clickHandler: (event) => window.location.href = gunLawUrl + stateName
-                    }
-                }
-                mapOfAverages.set(stateName, st['Firearm Fatalities'].toFixed(2));
+                setStateFill(st, colorMap);
             })
             giveStatesTitles();
         }
@@ -57,8 +44,28 @@ function Homepage() {
     }
 
     const handleSelect = (event) => {
-        // yearForData = event.target.value;
         setYearForData(event.target.value)
+    }
+
+
+    function setStateFill(st, colorMap) {
+        const stateName = st['State'];
+        // Opacity must be between 0 and 1, to do this I am taking the fatality
+        // dividing it by 100 so it is a decimal, keeping it to 4 decimal places, 
+        // and to make the opacity more visible, I chose to multiply by 4. 
+        const opacity = Number((st['Firearm Fatalities'] / 100)).toFixed(4) * 4;
+        const abbreviation = stateAbbreviationConversion.get(stateName);
+        if (abbreviation === null || abbreviation === '') {
+            console.log("ERROR", st);
+        }
+        else {
+            let fill = `rgba(240 , 0, 0, ${opacity} )`;
+            colorMap[abbreviation] = {
+                fill: fill,
+                clickHandler: (event) => window.location.href = gunLawUrl + stateName
+            };
+        }
+        mapOfAverages.set(stateName, st['Firearm Fatalities'].toFixed(2));
     }
 
     return (
@@ -70,7 +77,7 @@ function Homepage() {
             </div>
             <div className="dropdown d-flex justify-content-center">
                 <select className="form-control w-25" onChange={handleSelect}>
-                    <option className="dropdown-item text-center" href="#" onSelect={handleSelect} >2021</option>
+                    <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2021</option>
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2020</option>
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2019</option>
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2018</option>
