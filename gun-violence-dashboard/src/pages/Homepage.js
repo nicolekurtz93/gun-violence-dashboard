@@ -49,7 +49,7 @@ function Homepage() {
                         clickHandler: (event) => window.location.href = gunLawUrl + stateName
                     }
                 }
-                mapOfAverages.set(stateName, st['Firearm Fatalities'].toFixed(4));
+                mapOfAverages.set(stateName, st['Firearm Fatalities'].toFixed(2));
             })
             giveStatesTitles();
         }
