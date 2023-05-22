@@ -81,6 +81,7 @@ function Homepage() {
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2020</option>
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2019</option>
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2018</option>
+                    <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2017</option>
                 </select>
             </div>
             <div className="d-flex justify-content-center mt-4">
