@@ -1,0 +1,26 @@
+.detail-header {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.detail-text {
+    margin: 0;
+    margin-left: 5%;
+}
+
+.card {
+    width: 30%;
+    min-width: 30%;
+}
+
+.card-title {
+    font-size: 24px !important;
+}
+ 
+h1 {
+    font-size: 30px !important;
+}
+
+.us-state-map {
+    min-width: "650px";
+}
