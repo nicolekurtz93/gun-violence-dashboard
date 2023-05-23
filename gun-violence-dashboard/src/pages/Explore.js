@@ -1,52 +1,88 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
 
 // TODO:
 // dropdown of countries (need api to get country ids)
 // on dropdown select, hit api to get data for selected country
 
-function Explore () {
+// for gun ownership, show a histograph if multiple years, or a single number. 
 
-    const [gunsOwned, setGunsOwned] = useState([]);
-    // const [search, setSearch] = useState('');
+function Explore() {
+  const [gunsOwned, setGunsOwned] = useState('');
+  const [country, setCountry] = useState('');
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState({ 'value': '1', 'label': 'Afghanistan' });
+  const locationsUrl = '/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw';
+  let gunsOwnedUrl = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=${selectedLocation.value}&format=raw`;
 
-    useEffect(() => {
-      axios
-        .get('index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=1&format=raw')
-        .then((response) => {
-          console.log(response.data)
-          setGunsOwned(response.data.data);
-        })
-        .catch((error) => {
+  function formatGunOwnershipData(data) {
+    let formattedData = data.replace(/\{[^}]+\}|\^/g, '');
+    formattedData = formattedData.split(';');
+
+    return formattedData
+
+  }
+  useEffect(() => {
+    axios
+      .get(locationsUrl)
+      .then((response) => {
+        const locationObjects = response.data.locations.map((location) => ({
+          value: location.location_id,
+          label: location.name
+        }));
+        setLocations(locationObjects);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (selectedLocation) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(gunsOwnedUrl);
+          setGunsOwned(formatGunOwnershipData(response.data.result.columnValue));
+          setCountry(response.data.result.location);
+          console.log(response.data);
+        } catch (error) {
           console.error(error);
-        });
-    }, []);
-  
-    // const handleChange = (event) => {
-    //   setInput(event.target.value);
-    // };
-  
-    // const handleSubmit = (event) => {
-    //   event.preventDefault();
-    //   setSearch(input.toLowerCase());
-    // };
-  
-    // function executeSearch() {
-    //   let results = characters.filter((character) => {
-    //     if (character.fullName.toLowerCase().includes(search)) {
-    //       character.alt = `picture of ${character.fullName}`
-    //       return character;
-    //     }
-    //     return '';
-    //   })
-    // };
+        }
+      };
 
-    return (
-      <div className='d-flex flex-column justify-content-center align-items-center m-2'>
-      <h1>country name</h1>
-      <div>{gunsOwned}</div>
+      fetchData();
+    }
+  }, [selectedLocation, gunsOwnedUrl]);
+
+  const handleLocationChange = (selectedOption) => {
+    setSelectedLocation(selectedOption);
+  };
+
+  return (
+    <div className='d-flex flex-column justify-content-center align-items-center m-2'>
+      <h1>Explore By Location</h1>
+      <h2>{country}</h2>
+
+      <Select
+        options={locations}
+        value={selectedLocation}
+        onChange={handleLocationChange}
+        placeholder="Select a location"
+        isSearchable
+      />
+      <div className='d-flex justify-content-between'>
+        <div>
+          <h3>Gun Ownership</h3> 
+          {gunsOwned}
+        </div>
+        <div>
+          <h3>Gun Deaths</h3> 
+          {gunsOwned}
+        </div>
+      </div>
     </div>
-    );
+  );
 }
 
 export default Explore;
