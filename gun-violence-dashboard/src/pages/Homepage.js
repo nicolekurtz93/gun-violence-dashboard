@@ -74,7 +74,7 @@ function Homepage() {
 
             $('#card-title').text(`${stateName} Gun Detail`)
             $('.card-api-details').hide();
-            $('#loader').toggle();
+            $('#loader').css('display', 'inline')
 
             let grade = fetchStateGrade(stateId)
                 .then(result => {
@@ -104,7 +104,7 @@ function Homepage() {
             })
 
             prohib.then(ownership.then(grade.finally(x => {
-                $('#loader').toggle()
+                $('#loader').css('display', 'none')
                 $('.card-api-details').show()
             })))
 
