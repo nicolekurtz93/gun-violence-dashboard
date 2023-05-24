@@ -73,13 +73,11 @@ function Homepage() {
             const stateId = stateIdsForGunPolicyEndpoint.get(stateName);
 
             $('#card-title').text(`${stateName} Gun Detail`)
-            console.log('hidding')
             $('.card-api-details').hide();
             $('#loader').toggle();
 
             let grade = fetchStateGrade(stateId)
                 .then(result => {
-                    console.log(result)
                     $('.card-gun-grade')
                         .children('p.detail-header').text(`Giffords State Gun Law Grade:`)
                     $('.card-gun-grade')
