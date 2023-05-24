@@ -70,59 +70,54 @@ function Homepage() {
 
     function setClickBehaviorForState(gunLawUrl, stateName) {
         return (event) => {
-            clearStateCardData();
             const stateId = stateIdsForGunPolicyEndpoint.get(stateName);
 
             $('#card-title').text(`${stateName} Gun Detail`)
+            console.log('hidding')
+            $('.card-api-details').hide();
+            $('#loader').toggle();
 
-            fetchStateGrade(stateId)
+            let grade = fetchStateGrade(stateId)
                 .then(result => {
+                    console.log(result)
                     $('.card-gun-grade')
-                        .append($("<p></p>")
-                            .addClass('detail-header')
-                            .text(`Giffords State Gun Law Grade:`))
-                        .append($("<p></p>")
-                            .addClass('detail-text')
-                            .text(result))
+                        .children('p.detail-header').text(`Giffords State Gun Law Grade:`)
+                    $('.card-gun-grade')
+                        .children('p.detail-text').text(result)
                 })
 
-            fetchGunOwnershipLevels(stateId).then(results => {
+            let ownership = fetchGunOwnershipLevels(stateId).then(results => {
                 $('.card-household')
-                    .append($("<p></p>")
-                        .addClass('detail-header')
-                        .text(`\nPercentage of households with a gun: `))
+                    .children('.detail-header')
+                    .text(`\nPercentage of households with a gun: `)
                 results.forEach(result =>
                     $('.card-household')
-                        .append($("<p></p>")
-                            .addClass('detail-text')
-                            .text(`${result}`)))
+                        .children('.detail-text')
+                        .text(`${result}`))
             })
 
-            fetchProhibitedFireArms(stateId).then(results => {
+            let prohib = fetchProhibitedFireArms(stateId).then(results => {
                 $('.card-prohibited')
-                    .append($("<p></p>")
-                        .addClass('detail-header')
-                        .text(`\nProhibited Firearm and Ammunition: `))
+                    .children('.detail-header')
+                    .text(`\nProhibited Firearm and Ammunition: `)
                 $('.card-prohibited')
-                    .append($("<p></p>")
-                        .addClass('detail-text')
-                        .text(`${results}`))
+                    .children('.detail-text')
+                    .text(`${results}`)
             })
+
+            prohib.then(ownership.then(grade.finally(x => {
+                $('#loader').toggle()
+                $('.card-api-details').show()
+            })))
+
+            $('.card-link').html(``)
             $('.card-link')
                 .append($('<a></a>')
                     .attr('href', gunLawUrl)
                     .html(`Learn more about ${stateName}'s Gun Policies`))
+
+
         };
-    }
-
-    function clearStateCardData() {
-        $('#card-title').text(``)
-        $('#card-text').text(``)
-        $('.card-link').html(``)
-        $('.card-gun-grade').html(``)
-        $('.card-household').html(``)
-        $('.card-prohibited').html(``)
-
     }
 
     return (
@@ -152,11 +147,27 @@ function Homepage() {
                 <div className="m-5 card align-self-center p-2">
                     <div className="card-body">
                         <h2 className="card-title" id="card-title">State Detail</h2>
-                        <div className="card-text" id="card-text">Select a state to see more details about their firearm statistics.</div>
-                        <div className="card-link"></div>
-                        <div className="card-gun-grade"></div>
-                        <div className="card-household"></div>
-                        <div className="card-prohibited"></div>
+                        <img
+                            id="loader"
+                            src={require("../loader.gif")}
+                            alt="gif of a loading element"
+                        />
+                        <div className="card-api-details">
+                            <div className="card-text" id="card-text">Select a state to see more details about their firearm statistics.</div>
+                            <div className="card-link"></div>
+                            <div className="card-gun-grade">
+                                <p className="detail-header"></p>
+                                <p className="detail-text"></p>
+                            </div>
+                            <div className="card-household">
+                                <p className="detail-header"></p>
+                                <p className="detail-text"></p>
+                            </div>
+                            <div className="card-prohibited">
+                                <p className="detail-header"></p>
+                                <p className="detail-text"></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

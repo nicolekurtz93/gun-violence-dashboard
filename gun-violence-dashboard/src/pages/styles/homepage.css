@@ -24,3 +24,9 @@ h1 {
 .us-state-map {
     min-width: "650px";
 }
+
+
+#loader {
+  display: none;
+  width: 30%;
+}
