@@ -70,19 +70,21 @@ function Homepage() {
 
     function setClickBehaviorForState(gunLawUrl, stateName) {
         return (event) => {
+            cleanPreviousData();
             const stateId = stateIdsForGunPolicyEndpoint.get(stateName);
 
             $('#card-title').text(`${stateName} Gun Detail`)
             $('.card-api-details').hide();
-            $('#loader').css('display', 'inline')
+            $('#loader').css('display', 'inline-block')
 
-            let grade = fetchStateGrade(stateId)
-                .then(result => {
-                    $('.card-gun-grade')
-                        .children('p.detail-header').text(`Giffords State Gun Law Grade:`)
-                    $('.card-gun-grade')
-                        .children('p.detail-text').text(result)
-                })
+            let prohib = fetchProhibitedFireArms(stateId).then(results => {
+                $('.card-prohibited')
+                    .children('.detail-header')
+                    .text(`\nProhibited Firearm and Ammunition: `)
+                $('.card-prohibited')
+                    .children('.detail-text')
+                    .text(`${results}`)
+            })
 
             let ownership = fetchGunOwnershipLevels(stateId).then(results => {
                 $('.card-household')
@@ -94,16 +96,16 @@ function Homepage() {
                         .text(`${result}`))
             })
 
-            let prohib = fetchProhibitedFireArms(stateId).then(results => {
-                $('.card-prohibited')
-                    .children('.detail-header')
-                    .text(`\nProhibited Firearm and Ammunition: `)
-                $('.card-prohibited')
-                    .children('.detail-text')
-                    .text(`${results}`)
-            })
+            let grade = fetchStateGrade(stateId)
+                .then(result => {
+                    $('.card-gun-grade')
+                        .children('p.detail-header').text(`Giffords State Gun Law Grade:`)
+                    $('.card-gun-grade')
+                        .children('p.detail-text').text(result)
+                })
 
-            prohib.then(ownership.then(grade.finally(x => {
+
+            prohib.then(ownership.then(grade.then(x => {
                 $('#loader').css('display', 'none')
                 $('.card-api-details').show()
             })))
@@ -116,6 +118,10 @@ function Homepage() {
 
 
         };
+    }
+
+    function cleanPreviousData() {
+        $('p.detail-text').text('');
     }
 
     return (
@@ -133,8 +139,8 @@ function Homepage() {
                     <option className="dropdown-item text-center" href="#" onSelect={handleSelect}>2017</option>
                 </select>
             </div>
-            <div className="homepage-container d-flex justify-content-center">
-                <div className="d-flex justify-content-center mt-4 align-self-center">
+            <div className="homepage-container d-flex justify-content-center flex-wrap align-items-start mt-4">
+                <div className="d-flex justify-content-center mt-4 mb-4">
                     <USAMap
                         id='usaMap'
                         customize={formatStates()}
@@ -142,28 +148,31 @@ function Homepage() {
                         title='Number of deaths due to firearms per 100,000 population in the US' />
 
                 </div>
-                <div className="m-5 card align-self-center p-2">
-                    <div className="card-body">
-                        <h2 className="card-title" id="card-title">State Detail</h2>
-                        <img
-                            id="loader"
-                            src={require("../loader.gif")}
-                            alt="gif of a loading element"
-                        />
-                        <div className="card-api-details">
-                            <div className="card-text" id="card-text">Select a state to see more details about their firearm statistics.</div>
-                            <div className="card-link"></div>
-                            <div className="card-gun-grade">
-                                <p className="detail-header"></p>
-                                <p className="detail-text"></p>
-                            </div>
-                            <div className="card-household">
-                                <p className="detail-header"></p>
-                                <p className="detail-text"></p>
-                            </div>
-                            <div className="card-prohibited">
-                                <p className="detail-header"></p>
-                                <p className="detail-text"></p>
+                <div className="m-2 mt-4 card p-2 justify-content-start">
+                    <div className="card-body ">
+                        <div className="d-flex row">
+                            <h2 className="card-title" id="card-title">State Detail</h2>
+                            <img
+                                id="loader"
+                                src={require("../loader.gif")}
+                                alt="gif of a loading element"
+                                className="align-self-center"
+                            />
+                            <div className="card-api-details">
+                                <div className="card-text" id="card-text">Select a state to see more details about their firearm statistics.</div>
+                                <div className="card-link"></div>
+                                <div className="card-gun-grade">
+                                    <p className="detail-header"></p>
+                                    <p className="detail-text"></p>
+                                </div>
+                                <div className="card-household">
+                                    <p className="detail-header"></p>
+                                    <p className="detail-text"></p>
+                                </div>
+                                <div className="card-prohibited">
+                                    <p className="detail-header"></p>
+                                    <p className="detail-text"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
