@@ -77,47 +77,58 @@ function Homepage() {
             $('.card-api-details').hide();
             $('#loader').css('display', 'inline-block')
 
-            let prohib = fetchProhibitedFireArms(stateId).then(results => {
-                $('.card-prohibited')
-                    .children('.detail-header')
-                    .text(`\nProhibited Firearm and Ammunition: `)
-                $('.card-prohibited')
-                    .children('.detail-text')
-                    .text(`${results}`)
-            })
+            let prohib = setProhibitedDataForState(stateId)
 
-            let ownership = fetchGunOwnershipLevels(stateId).then(results => {
-                $('.card-household')
-                    .children('.detail-header')
-                    .text(`\nPercentage of households with a gun: `)
-                results.forEach(result =>
-                    $('.card-household')
-                        .children('.detail-text')
-                        .text(`${result}`))
-            })
+            let ownership = setOwnershipDataForState(stateId)
 
-            let grade = fetchStateGrade(stateId)
-                .then(result => {
-                    $('.card-gun-grade')
-                        .children('p.detail-header').text(`Giffords State Gun Law Grade:`)
-                    $('.card-gun-grade')
-                        .children('p.detail-text').text(result)
-                })
+            let grade = setGradeForState(stateId)
 
+            setStateGunPolicyLink(gunLawUrl, stateName);
 
             prohib.then(ownership.then(grade.then(x => {
                 $('#loader').css('display', 'none')
                 $('.card-api-details').show()
             })))
 
-            $('.card-link').html(``)
-            $('.card-link')
-                .append($('<a></a>')
-                    .attr('href', gunLawUrl)
-                    .html(`Learn more about ${stateName}'s Gun Policies`))
 
 
         };
+    }
+
+    function setStateGunPolicyLink(gunLawUrl, stateName) {
+        $('.card-link').html(``);
+        $('.card-link')
+            .append($('<a></a>')
+                .attr('href', gunLawUrl)
+                .html(`Learn more about ${stateName}'s Gun Policies`));
+    }
+
+    async function setGradeForState(stateId) {
+        const result = await fetchStateGrade(stateId);
+        $('.card-gun-grade')
+            .children('p.detail-header').text(`Giffords State Gun Law Grade:`);
+        $('.card-gun-grade')
+            .children('p.detail-text').text(result);
+    }
+
+    async function setOwnershipDataForState(stateId) {
+        const results = await fetchGunOwnershipLevels(stateId);
+        $('.card-household')
+            .children('.detail-header')
+            .text(`\nPercentage of households with a gun: `);
+        results.forEach(result_2 => $('.card-household')
+            .children('.detail-text')
+            .text(`${result_2}`));
+    }
+
+    async function setProhibitedDataForState(stateId) {
+        const results = await fetchProhibitedFireArms(stateId);
+        $('.card-prohibited')
+            .children('.detail-header')
+            .text(`\nProhibited Firearm and Ammunition: `);
+        $('.card-prohibited')
+            .children('.detail-text')
+            .text(`${results}`);
     }
 
     function cleanPreviousData() {
