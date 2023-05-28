@@ -109,7 +109,7 @@ function Homepage() {
             $('.card-api-details').hide();
             $('#loader').css('display', 'inline-block')
 
-            setBarChart(stateId)
+            let chart = setBarChart(stateId)
 
             let prohib = setProhibitedDataForState(stateId)
 
@@ -119,30 +119,28 @@ function Homepage() {
 
             setStateGunPolicyLink(gunLawUrl, stateName);
 
-            prohib.then(ownership.then(grade.then(x => {
+            prohib.then(ownership.then(grade.then(chart.then(x =>{
                 $('#loader').css('display', 'none')
                 $('.card-api-details').show()
-            })))
-
-
+            }))))
 
         };
     }
 
-    function setBarChart(stateId) {
-        fetchTotalNumberOfGunDeaths(stateId).then(result => {
-            let labels = Array.from(result.keys()).reverse();
-            let data = Array.from(result.values()).reverse();
-            let chartData = {
-                labels: labels,
-                datasets: [{
-                    label: null,
-                    data: data,
-                    backgroundColor: 'rgba(113, 222, 77, 1)',
-                }]
-            }
-            setBarChartData(chartData);
-        })
+    async function setBarChart(stateId) {
+        const result = await fetchTotalNumberOfGunDeaths(stateId);
+
+        let labels = Array.from(result.keys()).reverse();
+        let data = Array.from(result.values()).reverse();
+        let chartData = {
+            labels: labels,
+            datasets: [{
+                label: null,
+                data: data,
+                backgroundColor: 'rgba(113, 222, 77, 1)',
+            }]
+        }
+        setBarChartData(chartData);
     }
 
     function setStateGunPolicyLink(gunLawUrl, stateName) {

@@ -2,7 +2,7 @@ import React from "react";
 
 function Compare () {
     return (
-        <h1>About Page</h1>
+        <h1>This is the Compare Page</h1>
     );
 }
 
