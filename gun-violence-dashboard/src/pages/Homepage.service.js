@@ -73,7 +73,7 @@ function cleanUpTotalNumberOfGunDeathsData(data) {
     let arrayResult = result.split(';');
     let finalResultMap = new Map();
     arrayResult.forEach(element => {
-        if(element === undefined || element === '')
+        if (element === undefined || element === '')
             return;
         let splitElement = element.split(':')
         splitElement = splitElement.map(value => {
@@ -86,7 +86,7 @@ function cleanUpTotalNumberOfGunDeathsData(data) {
             }
         })
 
-        finalResultMap.set(splitElement[0],  Number(splitElement[1]))
+        finalResultMap.set(splitElement[0], Number(splitElement[1]))
     });
     return finalResultMap;
 }

@@ -119,7 +119,7 @@ function Homepage() {
 
             setStateGunPolicyLink(gunLawUrl, stateName);
 
-            prohib.then(ownership.then(grade.then(chart.then(x =>{
+            prohib.then(ownership.then(grade.then(chart.then(x => {
                 $('#loader').css('display', 'none')
                 $('.card-api-details').show()
             }))))
