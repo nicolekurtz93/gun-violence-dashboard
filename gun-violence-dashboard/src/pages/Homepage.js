@@ -1,21 +1,54 @@
 import React, { useEffect, useState } from "react";
 import USAMap from "react-usa-map";
 import axios from 'axios';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js'
+import { Bar } from 'react-chartjs-2'
 import states from '../constants/map_constants';
 import stateIds from "../constants/state_ids";
-import { fetchAvgFatalityData, fetchStateGrade, fetchGunOwnershipLevels, fetchProhibitedFireArms } from '../pages/Homepage.service'
+import { fetchAvgFatalityData, fetchStateGrade, fetchGunOwnershipLevels, fetchProhibitedFireArms, fetchTotalNumberOfGunDeaths } from '../pages/Homepage.service'
 import $ from 'jquery';
 import ReactDom from 'react-dom';
 import './styles/homepage.css';
 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
+
 function Homepage() {
     const [avgStateGunViolence, setAvgStateGunViolence] = useState([]);
     const [yearForData, setYearForData] = useState('2021')
+    const [barChartData, setBarChartData] = useState(undefined)
 
     let stateAbbreviationConversion = new Map(states);
     let stateIdsForGunPolicyEndpoint = new Map(stateIds);
     const mapOfAverages = new Map();
     const gunLawUrl = 'https://giffords.org/lawcenter/gun-laws/states/'
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Total Number of Gun Deaths By Year',
+            },
+            legend: {
+                display: false,
+            },
+        },
+    };
 
     $('.us-state-map').attr('width', '100%');
 
@@ -72,10 +105,11 @@ function Homepage() {
         return (event) => {
             cleanPreviousData();
             const stateId = stateIdsForGunPolicyEndpoint.get(stateName);
-
             $('#card-title').text(`${stateName} Gun Detail`)
             $('.card-api-details').hide();
             $('#loader').css('display', 'inline-block')
+
+            setBarChart(stateId)
 
             let prohib = setProhibitedDataForState(stateId)
 
@@ -93,6 +127,23 @@ function Homepage() {
 
 
         };
+    }
+
+    function setBarChart(stateId) {
+        fetchTotalNumberOfGunDeaths(stateId).then(result => {
+            let labels = Array.from(result.keys()).reverse();
+            let data = Array.from(result.values()).reverse();
+            let chartData = {
+                labels: labels,
+                datasets: [{
+                    label: null,
+                    data: data,
+                    backgroundColor: 'rgba(113, 222, 77, 1)',
+                }]
+            }
+            console.log(chartData)
+            setBarChartData(chartData);
+        })
     }
 
     function setStateGunPolicyLink(gunLawUrl, stateName) {
@@ -183,6 +234,10 @@ function Homepage() {
                                 <div className="card-prohibited">
                                     <p className="detail-header"></p>
                                     <p className="detail-text"></p>
+                                </div>
+                                <div className="chart-div">
+                                    {barChartData !== undefined ?
+                                        <Bar data={barChartData} options={chartOptions} /> : null}
                                 </div>
                             </div>
                         </div>

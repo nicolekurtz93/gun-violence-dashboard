@@ -37,8 +37,22 @@ div.card{
     svg.us-state-map {
         max-width: 90% !important;
     }
+    .chart-div {
+        min-width: 750px;
+    }
 }
 
+.chart-div {
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+}
+
+.chart-div > canvas {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 10px !important;
+}
 
 #loader {
   display: none;

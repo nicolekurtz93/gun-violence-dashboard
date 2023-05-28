@@ -17,7 +17,7 @@ export async function fetchStateGrade(stateId) {
         .then(result => {
             const finalResult = result.data.result;
             return (finalResult);
-            })
+        })
         .then(result => {
             const finalResult = result.columnValue.split('')[1];
             return (finalResult)
@@ -33,7 +33,7 @@ export async function fetchProhibitedFireArms(stateId) {
             return (finalResult);
         })
         .then(result => {
-            const finalResult = cleanUpGunPolicyDataNoDelimiter(result) 
+            const finalResult = cleanUpGunPolicyDataNoDelimiter(result)
             return (finalResult)
         })
         .catch((error) => console.log(error))
@@ -47,10 +47,48 @@ export async function fetchGunOwnershipLevels(stateId) {
             return (finalResult);
         })
         .then(result => {
-            const finalResult = cleanUpGunPolicyDataSemicolonDelimiter(result) 
+            const finalResult = cleanUpGunPolicyDataSemicolonDelimiter(result)
             return (finalResult);
         })
         .catch((error) => console.log(error))
+}
+
+export async function fetchTotalNumberOfGunDeaths(stateId) {
+    const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=total_number_of_gun_deaths&location_id=${stateId}&format=raw`
+    return await axios.get(url)
+        .then(result => {
+            const finalResult = result.data.result;
+            return (finalResult);
+        })
+        .then(result => {
+            const cleanResult = cleanUpTotalNumberOfGunDeathsData(result);
+            return (cleanResult);
+        })
+        .catch((error) => console.log(error));
+}
+
+function cleanUpTotalNumberOfGunDeathsData(data) {
+    // remove annotations
+    let result = data.columnValue.replace(/\{([^}]+)\}/g, "");
+    let arrayResult = result.split(';');
+    let finalResultMap = new Map();
+    arrayResult.forEach(element => {
+        if(element === undefined || element === '')
+            return;
+        let splitElement = element.split(':')
+        splitElement = splitElement.map(value => {
+            if (value !== '' && value !== undefined) {
+                if (value[0] === ' ') {
+                    value = value.substring(1);
+                }
+                value = value.replace(/,/g, "")
+                return value;
+            }
+        })
+
+        finalResultMap.set(splitElement[0],  Number(splitElement[1]))
+    });
+    return finalResultMap;
 }
 
 function cleanUpGunPolicyDataSemicolonDelimiter(data) {
