@@ -141,7 +141,6 @@ function Homepage() {
                     backgroundColor: 'rgba(113, 222, 77, 1)',
                 }]
             }
-            console.log(chartData)
             setBarChartData(chartData);
         })
     }
