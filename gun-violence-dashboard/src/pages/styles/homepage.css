@@ -1,0 +1,48 @@
+.detail-header {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.detail-text {
+    margin: 0;
+    margin-left: 5%;
+}
+
+.card {
+    width: 30%;
+    min-width: 30%;
+}
+
+.card-title {
+    font-size: 24px !important;
+}
+ 
+h1 {
+    font-size: 30px !important;
+}
+
+svg.us-state-map {
+    max-width: 750px !important;
+    height: auto !important;
+}
+
+div.card{
+    margin-top: 40px !important;
+}
+
+@media only screen and (max-width: 1117px) {
+    .card {
+        width: 75% !important;
+    }
+    svg.us-state-map {
+        max-width: 90% !important;
+    }
+}
+
+
+#loader {
+  display: none;
+  width: 30%;
+  text-align: center;
+  margin: 0 auto;
+}

@@ -10,6 +10,9 @@ export const Navbar = () => {
     return (
         <><nav className="navbar navbar-expand navbar-light text-align-center bg-primary">
             <ul className="navbar-nav d-flex flex-wrap">
+                <div className="logo">
+                    Gun Violence Dashboard
+                </div>
                 <li className="nav-item active p-2">
                     <a className="nav-link text-white font-weight-bold" href="/">Home </a>
                 </li>
