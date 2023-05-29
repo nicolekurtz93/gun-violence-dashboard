@@ -187,6 +187,7 @@ function Homepage() {
         <>
             <div className="m-3">
                 <h1 className="text-center">Number of deaths due to firearms per 100,000 population in the US</h1>
+                <h2 className="text-center">Click on state to learn more</h2>
             </div>
             <div className="dropdown d-flex justify-content-center align-center">
                 <label htmlFor="fatalityYear" className="form-input align-self-center">Select Year:</label>

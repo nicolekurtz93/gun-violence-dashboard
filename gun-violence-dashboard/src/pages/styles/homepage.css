@@ -21,6 +21,11 @@ h1 {
     font-size: 30px !important;
 }
 
+h2 {
+    font-size: 25px !important;
+    font-style: italic;
+}
+
 svg.us-state-map {
     max-width: 750px !important;
     height: auto !important;

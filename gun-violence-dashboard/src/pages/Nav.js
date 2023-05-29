@@ -11,11 +11,11 @@ export const Navbar = () => {
     return (
         <><nav className="navbar navbar-expand navbar-light text-align-center bg-primary">
             <ul className="navbar-nav d-flex flex-wrap">
-                <div className="logo">
-                    Gun Violence Dashboard
-                </div>
+                <li className="logo">
+                    <a className="nav-link text-white font-weight-bold" href="/">Gun Violence Dashboard</a>
+                </li>
                 <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/">Home </a>
+                    <a className="nav-link text-white font-weight-bold" href="/">Home</a>
                 </li>
                 <li className="nav-item p-2">
                     <a className="nav-link text-white font-weight-bold" href="/explore">Explore</a>
