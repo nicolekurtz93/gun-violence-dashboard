@@ -181,6 +181,7 @@ function Homepage() {
 
     function cleanPreviousData() {
         $('p.detail-text').text('');
+        $('div.card-text').text('');
     }
 
     return (
@@ -208,8 +209,8 @@ function Homepage() {
                         title='Number of deaths due to firearms per 100,000 population in the US' />
 
                 </div>
-                <div className="m-2 mt-4 card p-2 justify-content-start">
-                    <div className="card-body ">
+                <div className="m-2 mt-4 card p-2 justify-content-start state-container">
+                    <div className="card-body align-self-center ">
                         <div className="d-flex row">
                             <h2 className="card-title" id="card-title">State Detail</h2>
                             <img
@@ -220,7 +221,7 @@ function Homepage() {
                             />
                             <div className="card-api-details">
                                 <div className="card-text" id="card-text">Select a state to see more details about their firearm statistics.</div>
-                                <div className="card-link"></div>
+                                <div className="card-link mb-4"></div>
                                 <div className="card-gun-grade">
                                     <p className="detail-header"></p>
                                     <p className="detail-text"></p>
@@ -233,7 +234,7 @@ function Homepage() {
                                     <p className="detail-header"></p>
                                     <p className="detail-text"></p>
                                 </div>
-                                <div className="chart-div">
+                                <div className="chart-div mt-4">
                                     {barChartData !== undefined ?
                                         <Bar data={barChartData} options={chartOptions} /> : null}
                                 </div>

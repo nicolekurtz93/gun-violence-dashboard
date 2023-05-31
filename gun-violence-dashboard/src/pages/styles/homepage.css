@@ -65,3 +65,9 @@ div.card{
   text-align: center;
   margin: 0 auto;
 }
+
+div.card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

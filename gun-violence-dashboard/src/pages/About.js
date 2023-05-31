@@ -1,9 +1,10 @@
 import React from "react";
+import './styles/about.css';
 
 function About() {
     return (
         <div className="d-flex justify-content-center">
-            <div className="m-3 container">
+            <div className="m-3 container about-container">
                 <h1 className="text-center">About Gun Violence Dashboard</h1>
                 <p className="">
                     The Gun Violence Dashboard was created to provide statics on gun violence worldwide,
