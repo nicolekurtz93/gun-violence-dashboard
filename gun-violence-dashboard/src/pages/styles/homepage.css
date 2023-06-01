@@ -21,6 +21,11 @@ h1 {
     font-size: 30px !important;
 }
 
+h2 {
+    font-size: 25px !important;
+    font-style: italic;
+}
+
 svg.us-state-map {
     max-width: 750px !important;
     height: auto !important;
@@ -37,12 +42,32 @@ div.card{
     svg.us-state-map {
         max-width: 90% !important;
     }
+    .chart-div {
+        min-width: 750px;
+    }
 }
 
+.chart-div {
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+}
+
+.chart-div > canvas {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 10px !important;
+}
 
 #loader {
   display: none;
   width: 30%;
   text-align: center;
   margin: 0 auto;
+}
+
+div.card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

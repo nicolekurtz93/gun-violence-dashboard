@@ -1,21 +1,54 @@
 import React, { useEffect, useState } from "react";
 import USAMap from "react-usa-map";
 import axios from 'axios';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js'
+import { Bar } from 'react-chartjs-2'
 import states from '../constants/map_constants';
 import stateIds from "../constants/state_ids";
-import { fetchAvgFatalityData, fetchStateGrade, fetchGunOwnershipLevels, fetchProhibitedFireArms } from '../pages/Homepage.service'
+import { fetchAvgFatalityData, fetchStateGrade, fetchGunOwnershipLevels, fetchProhibitedFireArms, fetchTotalNumberOfGunDeaths } from '../pages/Homepage.service'
 import $ from 'jquery';
 import ReactDom from 'react-dom';
 import './styles/homepage.css';
 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
+
 function Homepage() {
     const [avgStateGunViolence, setAvgStateGunViolence] = useState([]);
     const [yearForData, setYearForData] = useState('2021')
+    const [barChartData, setBarChartData] = useState(undefined)
 
     let stateAbbreviationConversion = new Map(states);
     let stateIdsForGunPolicyEndpoint = new Map(stateIds);
     const mapOfAverages = new Map();
     const gunLawUrl = 'https://giffords.org/lawcenter/gun-laws/states/'
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Total Number of Gun Deaths By Year',
+            },
+            legend: {
+                display: false,
+            },
+        },
+    };
 
     $('.us-state-map').attr('width', '100%');
 
@@ -72,10 +105,11 @@ function Homepage() {
         return (event) => {
             cleanPreviousData();
             const stateId = stateIdsForGunPolicyEndpoint.get(stateName);
-
             $('#card-title').text(`${stateName} Gun Detail`)
             $('.card-api-details').hide();
             $('#loader').css('display', 'inline-block')
+
+            let chart = setBarChart(stateId)
 
             let prohib = setProhibitedDataForState(stateId)
 
@@ -85,14 +119,28 @@ function Homepage() {
 
             setStateGunPolicyLink(gunLawUrl, stateName);
 
-            prohib.then(ownership.then(grade.then(x => {
+            prohib.then(ownership.then(grade.then(chart.then(x => {
                 $('#loader').css('display', 'none')
                 $('.card-api-details').show()
-            })))
-
-
+            }))))
 
         };
+    }
+
+    async function setBarChart(stateId) {
+        const result = await fetchTotalNumberOfGunDeaths(stateId);
+
+        let labels = Array.from(result.keys()).reverse();
+        let data = Array.from(result.values()).reverse();
+        let chartData = {
+            labels: labels,
+            datasets: [{
+                label: null,
+                data: data,
+                backgroundColor: 'rgba(113, 222, 77, 1)',
+            }]
+        }
+        setBarChartData(chartData);
     }
 
     function setStateGunPolicyLink(gunLawUrl, stateName) {
@@ -133,12 +181,14 @@ function Homepage() {
 
     function cleanPreviousData() {
         $('p.detail-text').text('');
+        $('div.card-text').text('');
     }
 
     return (
         <>
             <div className="m-3">
                 <h1 className="text-center">Number of deaths due to firearms per 100,000 population in the US</h1>
+                <h2 className="text-center">Click on state to learn more</h2>
             </div>
             <div className="dropdown d-flex justify-content-center align-center">
                 <label htmlFor="fatalityYear" className="form-input align-self-center">Select Year:</label>
@@ -159,8 +209,8 @@ function Homepage() {
                         title='Number of deaths due to firearms per 100,000 population in the US' />
 
                 </div>
-                <div className="m-2 mt-4 card p-2 justify-content-start">
-                    <div className="card-body ">
+                <div className="m-2 mt-4 card p-2 justify-content-start state-container">
+                    <div className="card-body align-self-center ">
                         <div className="d-flex row">
                             <h2 className="card-title" id="card-title">State Detail</h2>
                             <img
@@ -171,7 +221,7 @@ function Homepage() {
                             />
                             <div className="card-api-details">
                                 <div className="card-text" id="card-text">Select a state to see more details about their firearm statistics.</div>
-                                <div className="card-link"></div>
+                                <div className="card-link mb-4"></div>
                                 <div className="card-gun-grade">
                                     <p className="detail-header"></p>
                                     <p className="detail-text"></p>
@@ -183,6 +233,10 @@ function Homepage() {
                                 <div className="card-prohibited">
                                     <p className="detail-header"></p>
                                     <p className="detail-text"></p>
+                                </div>
+                                <div className="chart-div mt-4">
+                                    {barChartData !== undefined ?
+                                        <Bar data={barChartData} options={chartOptions} /> : null}
                                 </div>
                             </div>
                         </div>

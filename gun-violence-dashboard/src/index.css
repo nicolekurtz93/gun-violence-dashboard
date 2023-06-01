@@ -23,3 +23,7 @@ code {
   background-color: red;
   border-radius: 10%;
 }
+
+.nav-item:active {
+  background-color: #1a55ff;
+}
