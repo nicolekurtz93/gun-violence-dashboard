@@ -4,6 +4,7 @@ import Homepage from "./Homepage";
 import Explore from "./Explore";
 import Compare from "./Compare";
 import 'bootstrap/dist/css/bootstrap.css';
+import Ranking from "./Ranking";
 
 
 export const Navbar = () => {
@@ -22,6 +23,9 @@ export const Navbar = () => {
                 <li className="nav-item p-2">
                     <a className="nav-link text-white font-weight-bold" href="/compare">Compare</a>
                 </li>
+                <li className="nav-item p-2">
+                    <a className="nav-link text-white font-weight-bold" href="/ranking">Ranking</a>
+                </li>
             </ul>
         </nav>
             <BrowserRouter>
@@ -29,6 +33,7 @@ export const Navbar = () => {
                     <Route title='Homepage' path='/' element={<Homepage />} />
                     <Route title='Explore' path='/explore' element={<Explore />} />
                     <Route title='Comapre' path='/compare' element={<Compare />} />
+                    <Route title='Comapre' path='/ranking' element={<Ranking />} />
                 </Routes>
             </BrowserRouter></>
     );
