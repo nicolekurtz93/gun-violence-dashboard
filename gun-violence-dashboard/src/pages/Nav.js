@@ -6,9 +6,24 @@ import Compare from "./Compare";
 import About from "./About";
 import 'bootstrap/dist/css/bootstrap.css';
 import Ranking from "./Ranking";
+import { useEffect, useState } from "react";
+import {fetchCountryId, fetchPrivatelyOwnedFireArms} from "./Ranking.service"
 
 
 export const Navbar = () => {
+    const [countryId, setCountryIds] = useState([]);
+    const [privatelyOwnedFireArms, setPrivatelyOwnedFireArms] = useState([]);
+    useEffect(() => {
+        fetchCountryId().then(result => {
+            setCountryIds(result)
+            fetchPrivatelyOwnedFireArms(result).then(result => {
+                console.log(result)
+                setPrivatelyOwnedFireArms(result)
+                console.log(privatelyOwnedFireArms)
+            }
+            )
+        })
+    }, []);
     return (
         <><nav className="navbar navbar-expand navbar-light text-align-center bg-primary">
             <ul className="navbar-nav d-flex flex-wrap">
@@ -37,7 +52,7 @@ export const Navbar = () => {
                     <Route title='Homepage' path='/' element={<Homepage />} />
                     <Route title='Explore' path='/explore' element={<Explore />} />
                     <Route title='Comapre' path='/compare' element={<Compare />} />
-                    <Route title='Comapre' path='/ranking' element={<Ranking />} />
+                    <Route title='Comapre' path='/ranking' element={<Ranking privatelyOwnedFireArms={privatelyOwnedFireArms}/>} />
                     <Route title='About' path='/about' element={<About />} />
                 </Routes>
             </BrowserRouter></>
