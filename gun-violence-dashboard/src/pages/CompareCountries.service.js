@@ -7,7 +7,9 @@ export async function fetchCountryId() {
     return await axios.get(url)
         .then(result => {
             const finalResult = result.data.locations;
-            return (finalResult);
+            let mapResult = new Map();
+            finalResult.map(x => mapResult.set(x.id, x.name));
+            return (mapResult);
         })
         .catch((error) => console.log(error))
 }
