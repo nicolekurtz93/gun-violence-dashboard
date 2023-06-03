@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import React from 'react';
@@ -39,8 +39,7 @@ function Explore() {
       });
   };
 
-  const fetchGunDeaths = () => {
-    if (selectedLocation) {
+  const fetchGunDeaths = useCallback(() => {
       axios
         .get(gunDeathsUrl)
         .then((response) => {
@@ -61,24 +60,25 @@ function Explore() {
         .catch((error) => {
           console.error(error);
         });
-    }
-  }
+  }, [gunDeathsUrl]);
 
-  const fetchGunsOwned = (location) => {
-    if (location) {
+  const fetchGunsOwned = useCallback(() => {
       axios
         .get(gunsOwnedUrl)
         .then((response) => {
           const cleanedData = cleanData(response.data.result.columnValue);
-          let years = cleanedData.map(str => str.split(':')[0]);
-          let data = cleanedData.map(str => str.split(':')[1]);
-
-          if (!years.includes(':')) {
+          let years = [];
+          let data = [];
+          
+          if (cleanedData[0].includes(':')) {
+            years = cleanedData.map(str => str.split(':')[0]);
+            data = cleanedData.map(str => str.split(':')[1]);
             years = years.filter(str => str !== "" && str !== undefined);
             data = data.filter(str => str !== "" && str !== undefined);
             years = years.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
             data = data.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
           } else {
+            years = cleanedData[0];
             data = []
           }
 
@@ -90,8 +90,7 @@ function Explore() {
         .catch((error) => {
           console.error(error);
         });
-    }
-  };
+  }, [gunsOwnedUrl]);
 
   const handleLocationChange = (selectedOption) => {
     setSelectedLocation(selectedOption);
@@ -101,7 +100,7 @@ function Explore() {
     fetchLocations();
     fetchGunsOwned(selectedLocation);
     fetchGunDeaths();
-  }, [selectedLocation]);
+  }, [fetchGunDeaths, fetchGunsOwned, selectedLocation]);
 
   const gunsOwnedChartOptions = {
     responsive: true,
@@ -155,7 +154,7 @@ function Explore() {
     if (gunsOwnedData.length >= 1) {
       return (<Bar options={gunsOwnedChartOptions} data={gunsOwnedChartData}></Bar>);
     } else {
-      return (<p>No yearly data available. Estimated numbers: {gunsOwnedYears.length || "None available"}</p>)
+      return (<p>No yearly data available. Estimated numbers: {gunsOwnedYears.length >= 1 ? gunsOwnedYears : "None available"}</p>)
     }
   }
 
