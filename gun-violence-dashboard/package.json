@@ -5,6 +5,7 @@
   "proxy": "https://www.gunpolicy.org",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "@types/react-select": "^5.0.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.3.0",
