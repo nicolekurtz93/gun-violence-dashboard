@@ -158,7 +158,7 @@ function Explore() {
     }
   }
 
-  function renderedGunDeathsChart() {
+  function renderGunDeathsChart() {
     if (gunDeathsData.length >= 1) {
       return (<Bar options={gunDeathsChartOptions} data={gunDeathsChartData}></Bar>);
     } else {
@@ -185,7 +185,7 @@ function Explore() {
         </div>
         <div className=''>
           <h3>Gun Deaths</h3>
-          {renderedGunDeathsChart()}
+          {renderGunDeathsChart()}
         </div>
       </div>
 
