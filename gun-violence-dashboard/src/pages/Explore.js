@@ -150,7 +150,7 @@ function Explore() {
     ],
   };
 
-  function renderedGunsOwnedChart() {
+  function renderGunsOwnedChart() {
     if (gunsOwnedData.length >= 1) {
       return (<Bar options={gunsOwnedChartOptions} data={gunsOwnedChartData}></Bar>);
     } else {
@@ -181,7 +181,7 @@ function Explore() {
       <div className='d-flex flex-row justify-content-around w-75 mt-4'>
         <div className=''>
           <h3>Gun Ownership</h3>
-          {renderedGunsOwnedChart()}
+          {renderGunsOwnedChart()}
         </div>
         <div className=''>
           <h3>Gun Deaths</h3>
