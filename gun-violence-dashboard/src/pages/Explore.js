@@ -40,56 +40,56 @@ function Explore() {
   };
 
   const fetchGunDeaths = useCallback(() => {
-      axios
-        .get(gunDeathsUrl)
-        .then((response) => {
-          const cleanedData = cleanData(response.data.result.columnValue);
+    axios
+      .get(gunDeathsUrl)
+      .then((response) => {
+        const cleanedData = cleanData(response.data.result.columnValue);
 
-          let years = cleanedData.map(str => str.split(':')[0]);
-          let data = cleanedData.map(str => str.split(':')[1]);
+        let years = cleanedData.map(str => str.split(':')[0]);
+        let data = cleanedData.map(str => str.split(':')[1]);
 
-          years = years.filter(str => str !== "" && str !== undefined);
-          years = years.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
+        years = years.filter(str => str !== "" && str !== undefined);
+        years = years.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
 
-          data = data.filter(str => str !== "" && str !== undefined);
-          data = data.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
+        data = data.filter(str => str !== "" && str !== undefined);
+        data = data.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
 
-          setGunDeathsYears(years);
-          setGunDeathsData(data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        setGunDeathsYears(years);
+        setGunDeathsData(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [gunDeathsUrl]);
 
   const fetchGunsOwned = useCallback(() => {
-      axios
-        .get(gunsOwnedUrl)
-        .then((response) => {
-          const cleanedData = cleanData(response.data.result.columnValue);
-          let years = [];
-          let data = [];
-          
-          if (cleanedData[0].includes(':')) {
-            years = cleanedData.map(str => str.split(':')[0]);
-            data = cleanedData.map(str => str.split(':')[1]);
-            years = years.filter(str => str !== "" && str !== undefined);
-            data = data.filter(str => str !== "" && str !== undefined);
-            years = years.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
-            data = data.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
-          } else {
-            years = cleanedData[0];
-            data = []
-          }
+    axios
+      .get(gunsOwnedUrl)
+      .then((response) => {
+        const cleanedData = cleanData(response.data.result.columnValue);
+        let years = [];
+        let data = [];
 
-          setCountry(response.data.result.location);
-          setGunsOwnedYears(years);
-          setGunsOwnedData(data);
+        if (cleanedData[0].includes(':')) {
+          years = cleanedData.map(str => str.split(':')[0]);
+          data = cleanedData.map(str => str.split(':')[1]);
+          years = years.filter(str => str !== "" && str !== undefined);
+          data = data.filter(str => str !== "" && str !== undefined);
+          years = years.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
+          data = data.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
+        } else {
+          years = cleanedData[0];
+          data = []
+        }
 
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        setCountry(response.data.result.location);
+        setGunsOwnedYears(years);
+        setGunsOwnedData(data);
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [gunsOwnedUrl]);
 
   const handleLocationChange = (selectedOption) => {
