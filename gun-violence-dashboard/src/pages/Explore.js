@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
-
-// TODO:
-// dropdown of countries (need api to get country ids)
-// on dropdown select, hit api to get data for selected country
-
-// for gun ownership, show a histograph if multiple years, or a single number. 
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
 
 function Explore() {
-  const [gunsOwned, setGunsOwned] = useState('');
+  const [gunsOwnedData, setGunsOwnedData] = useState([]);
+  const [gunsOwnedYears, setGunsOwnedYears] = useState([]);
   const [country, setCountry] = useState('');
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState({ 'value': '1', 'label': 'Afghanistan' });
   const locationsUrl = '/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw';
-  let gunsOwnedUrl = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=${selectedLocation.value}&format=raw`;
 
   function formatGunOwnershipData(data) {
     let formattedData = data.replace(/\{[^}]+\}|\^/g, '');
@@ -23,6 +19,7 @@ function Explore() {
     return formattedData
 
   }
+
   useEffect(() => {
     axios
       .get(locationsUrl)
@@ -40,31 +37,67 @@ function Explore() {
 
   useEffect(() => {
     if (selectedLocation) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(gunsOwnedUrl);
-          setGunsOwned(formatGunOwnershipData(response.data.result.columnValue));
-          setCountry(response.data.result.location);
-          console.log(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+      const gunsOwnedUrl = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=${selectedLocation.value}&format=raw`;
 
-      fetchData();
+      axios
+        .get(gunsOwnedUrl)
+        .then((response) => {
+          const formattedData = formatGunOwnershipData(response.data.result.columnValue);
+          let years = formattedData.map(str => str.split(':')[0]);
+          let data = formattedData.map(str => str.split(':')[1]);
+
+          years = years.filter(str => str !== "" && str !== undefined);
+          years = years.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
+
+          data = data.filter(str => str !== "" && str !== undefined);
+          data = data.map(str => parseInt(str.replace(/[, ]/g, ""), 10));
+
+          setCountry(response.data.result.location);
+          setGunsOwnedYears(years);
+          setGunsOwnedData(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-  }, [selectedLocation, gunsOwnedUrl]);
+  }, [selectedLocation]);
 
   const handleLocationChange = (selectedOption) => {
     setSelectedLocation(selectedOption);
   };
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+      },
+      title: {
+        display: false,
+      },
+    },
+  };
+
+
+  const data = {
+    labels: gunsOwnedYears,
+    datasets: [
+      {
+        label: 'Privately Owned Guns',
+        data: gunsOwnedData,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
+
   return (
     <div className='d-flex flex-column justify-content-center align-items-center m-2'>
       <h1>Explore By Location</h1>
       <h2>{country}</h2>
-
       <Select
+        aria-label='countrySelector'
         options={locations}
         value={selectedLocation}
         onChange={handleLocationChange}
@@ -73,14 +106,14 @@ function Explore() {
       />
       <div className='d-flex justify-content-between'>
         <div>
-          <h3>Gun Ownership</h3> 
-          {gunsOwned}
+          <h3>Gun Ownership</h3>
+          <Bar options={options} data={data} />
         </div>
         <div>
-          <h3>Gun Deaths</h3> 
-          {gunsOwned}
+          <h3>Gun Deaths</h3>
         </div>
       </div>
+
     </div>
   );
 }
