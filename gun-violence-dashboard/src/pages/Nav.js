@@ -28,7 +28,7 @@ export const Navbar = (props) => {
                     <a className="nav-link text-white font-weight-bold" href="/compare">Compare</a>
                 </li>
                 <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/ranking">Ranking</a>
+                    <a className="nav-link text-white font-weight-bold" href="/compare-countries">Compare Countries</a>
                 </li>
                 <li className="nav-item p-2">
                     <a className="nav-link text-white font-weight-bold" href="/about">About</a>
@@ -39,8 +39,8 @@ export const Navbar = (props) => {
                 <Routes>
                     <Route title='Homepage' path='/' element={<Homepage />} />
                     <Route title='Explore' path='/explore' element={<Explore />} />
-                    <Route title='Comapre' path='/compare' element={<Compare />} />
-                    <Route title='Comapre' path='/ranking' element={<CompareCountries countryIds={countryIds} />} />
+                    <Route title='Compare' path='/compare' element={<Compare />} />
+                    <Route title='Compare-Countries' path='/compare-countries' element={<CompareCountries countryIds={countryIds} />} />
                     <Route title='About' path='/about' element={<About />} />
                 </Routes>
             </BrowserRouter></>

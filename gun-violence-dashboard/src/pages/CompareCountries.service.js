@@ -15,15 +15,43 @@ export async function fetchCountryId() {
 }
 
 export async function fetchPrivatelyOwnedFireArms(countryIdList) {
-    let listOfRanking = []
-    countryIdList.forEach(async countryId => {
-        const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms_-_world_ranking&location_id=${countryId.id}&format=raw`;
-        await axios.get(url)
+    let listOfRanking = new Map();
+    let promises = []
+    console.log(countryIdList)
+    await countryIdList.forEach(async countryId => {
+
+        const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=${parseInt(countryId)}&format=raw`;
+        let response = axios.get(url)
             .then(result => {
-                let finalResult = result.data.result;
-                listOfRanking.push(finalResult)
+                let finalResult = cleanUpEndpointDataForLineChart(result.data.result);
+                listOfRanking.set(countryId, finalResult)
             })
             .catch((error) => console.log(error))
+        promises.push(response);
     });
-    return listOfRanking;
+    return Promise.all(promises).then(() => {return listOfRanking});
+}
+
+function cleanUpEndpointDataForLineChart(data) {
+    // remove annotations
+    let result = data.columnValue.replace(/\{([^}]+)\}/g, "");
+    let arrayResult = result.split(';');
+    let finalResultMap = new Map();
+    arrayResult.forEach(element => {
+        if (element === undefined || element === '')
+            return;
+        let splitElement = element.split(':')
+        splitElement = splitElement.map(value => {
+            if (value !== '' && value !== undefined) {
+                if (value[0] === ' ') {
+                    value = value.substring(1);
+                }
+                value = value.replace(/,/g, "")
+                return value;
+            }
+        })
+
+        finalResultMap.set(splitElement[0], Number(splitElement[1]))
+    });
+    return finalResultMap;
 }
