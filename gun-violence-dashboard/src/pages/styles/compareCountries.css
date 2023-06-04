@@ -1,3 +1,5 @@
-select {
-    height: 500px !important;
+#country_ids,
+#country_ids_selected {
+    height: 300px;
+    width: 200px !important;
 }
