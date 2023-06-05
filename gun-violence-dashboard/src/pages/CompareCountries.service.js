@@ -28,7 +28,7 @@ export async function fetchPrivatelyOwnedFireArms(countryIdList, category) {
             .catch((error) => console.log(error))
         promises.push(response);
     });
-    return Promise.all(promises).then(() => {return listOfRanking});
+    return Promise.all(promises).then(() => { return listOfRanking });
 }
 
 function cleanUpEndpointDataForLineChart(data) {

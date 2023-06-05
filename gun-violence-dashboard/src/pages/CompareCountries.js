@@ -8,7 +8,7 @@ import Chart from 'chart.js/auto'
 function CompareCountries(props) {
     const { countryIds } = props;
     let [endpointData, setEndpointData] = useState(null);
-    let [category, setCategory] = useState({value: 'number_of_privately_owned_firearms', text: 'Privately Owned Firearms'})
+    let [category, setCategory] = useState({ value: 'number_of_privately_owned_firearms', text: 'Privately Owned Firearms' })
     let [chartData, setChartData] = useState(undefined);
     let [chartOptions, setChartOptions] = useState(undefined);
 
@@ -31,7 +31,7 @@ function CompareCountries(props) {
             let labels = []
             let emptyData = []
             endpointData.forEach((value, key) => {
-                if (value.size === 0 || (value.size === 1 && isNaN(value.values()[0])) ) {
+                if (value.size === 0 || (value.size === 1 && isNaN(value.values()[0]))) {
                     emptyData.push(countryIds.get(key))
                 }
                 else {
@@ -50,8 +50,8 @@ function CompareCountries(props) {
                 datasets: data
             }
             if (emptyData.length > 0) {
-                    $('.no-data')
-                        .append(`<p class='font-italic text-danger'>${emptyData.join(', ')} did not have data</p>`)
+                $('.no-data')
+                    .append(`<p class='font-italic text-danger'>${emptyData.join(', ')} did not have data</p>`)
             }
             setChartData(tempchartData)
         }
@@ -117,7 +117,7 @@ function CompareCountries(props) {
 
     const handleCategorySelect = (event) => {
         const text = $('#chartCategory option:selected').text()
-        setCategory({value: event.target.value, text: text})
+        setCategory({ value: event.target.value, text: text })
     }
     return (
         <>
@@ -163,7 +163,7 @@ function CompareCountries(props) {
                 {chartData !== undefined ?
                     <Line data={chartData} options={chartOptions} id="compare-line-chart" /> : null}
             </div>
-                <div className="no-data w-100 text-center"></div>
+            <div className="no-data w-100 text-center"></div>
         </>
     );
 
