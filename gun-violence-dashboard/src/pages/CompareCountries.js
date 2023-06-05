@@ -31,7 +31,6 @@ function CompareCountries(props) {
             let labels = []
             let emptyData = []
             endpointData.forEach((value, key) => {
-                console.log(value, key)
                 if (value.size === 0 || (value.size === 1 && isNaN(value.values()[0])) ) {
                     emptyData.push(countryIds.get(key))
                 }
