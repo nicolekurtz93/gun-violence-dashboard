@@ -1,6 +1,5 @@
 {
   "name": "my-app",
-  "homepage": "https://stevensonmat2.github.io/gun-violence-dashboard",
   "version": "0.1.0",
   "private": false,
   "proxy": "https://www.gunpolicy.org",
