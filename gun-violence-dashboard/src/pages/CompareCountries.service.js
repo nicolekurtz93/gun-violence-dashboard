@@ -14,13 +14,12 @@ export async function fetchCountryId() {
         .catch((error) => console.log(error))
 }
 
-export async function fetchPrivatelyOwnedFireArms(countryIdList) {
+export async function fetchPrivatelyOwnedFireArms(countryIdList, category) {
     let listOfRanking = new Map();
     let promises = []
-    console.log(countryIdList)
     await countryIdList.forEach(async countryId => {
 
-        const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=${parseInt(countryId)}&format=raw`;
+        const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=${category}&location_id=${parseInt(countryId)}&format=raw`;
         let response = axios.get(url)
             .then(result => {
                 let finalResult = cleanUpEndpointDataForLineChart(result.data.result);
