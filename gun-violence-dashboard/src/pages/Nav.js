@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage";
 import Explore from "./Explore";
 import Compare from "./Compare";
 import About from "./About";
 import 'bootstrap/dist/css/bootstrap.css';
+import { fetchCountryId } from "./CompareCountries.service";
+import CompareCountries from "./CompareCountries";
 
 
-export const Navbar = () => {
+export const Navbar = (props) => {
+    const {countryIds} = props;
+
     return (
         <><nav className="navbar navbar-expand navbar-light text-align-center bg-primary">
             <ul className="navbar-nav d-flex flex-wrap">
@@ -24,6 +28,9 @@ export const Navbar = () => {
                     <a className="nav-link text-white font-weight-bold" href="/compare">Compare</a>
                 </li>
                 <li className="nav-item p-2">
+                    <a className="nav-link text-white font-weight-bold" href="/compare-countries">Compare Countries</a>
+                </li>
+                <li className="nav-item p-2">
                     <a className="nav-link text-white font-weight-bold" href="/about">About</a>
                 </li>
             </ul>
@@ -33,6 +40,7 @@ export const Navbar = () => {
                     <Route title='Homepage' path='/' element={<Homepage />} />
                     <Route title='Explore' path='/explore' element={<Explore />} />
                     <Route title='Compare' path='/compare' element={<Compare />} />
+                    <Route title='Compare-Countries' path='/compare-countries' element={<CompareCountries countryIds={countryIds} />} />
                     <Route title='About' path='/about' element={<About />} />
                 </Routes>
             </BrowserRouter></>

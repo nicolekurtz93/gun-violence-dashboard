@@ -1,0 +1,10 @@
+#country_ids,
+#country_ids_selected {
+    height: 300px;
+    width: 200px !important;
+}
+
+#compare-line-chart{
+    max-width: 1200px !important;
+    height: auto !important;
+}
