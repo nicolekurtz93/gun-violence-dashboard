@@ -9,12 +9,17 @@ function Explore() {
   const [gunsOwnedYears, setGunsOwnedYears] = useState([]);
   const [gunDeathsData, setGunDeathsData] = useState([]);
   const [gunDeathsYears, setGunDeathsYears] = useState([]);
+  const [prohibitedFirearms, setProhibitedFirearms] = useState([]);
+
+
   const [country, setCountry] = useState('');
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState({ 'value': '1', 'label': 'Afghanistan' });
+
   const locationsUrl = '/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw';
   const gunsOwnedUrl = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=number_of_privately_owned_firearms&location_id=${selectedLocation.value}&format=raw`;
   const gunDeathsUrl = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=total_number_of_gun_deaths&location_id=${selectedLocation.value}&format=raw`;
+  const prohibitedFirearmsUrl = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=prohibited_firearms_and_ammunition&location_id=${selectedLocation.value}&format=raw`
 
   function cleanData(data) {
     let cleanedData = data.replace(/\{[^}]+\}|\^/g, '');
@@ -92,6 +97,18 @@ function Explore() {
       });
   }, [gunsOwnedUrl]);
 
+  const fetchProhibitions = useCallback(() => {
+    axios
+      .get(prohibitedFirearmsUrl)
+      .then((response) => {
+        const cleanedData = cleanData(response.data.result.columnValue)
+        setProhibitedFirearms(cleanedData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [prohibitedFirearmsUrl]);
+
   const handleLocationChange = (selectedOption) => {
     setSelectedLocation(selectedOption);
   };
@@ -100,7 +117,8 @@ function Explore() {
     fetchLocations();
     fetchGunsOwned(selectedLocation);
     fetchGunDeaths();
-  }, [fetchGunDeaths, fetchGunsOwned, selectedLocation]);
+    fetchProhibitions();
+  }, [fetchGunDeaths, fetchGunsOwned, fetchProhibitions, selectedLocation]);
 
   const gunsOwnedChartOptions = {
     responsive: true,
@@ -150,6 +168,15 @@ function Explore() {
     ],
   };
 
+  function renderProhibitons() {
+    return (
+        <div>
+        <h4>Civillians are prohbitied from owning: </h4>
+        <p>{prohibitedFirearms !== "" ? prohibitedFirearms : "No data available"}</p>
+        </div>
+    )
+  }
+
   function renderGunsOwnedChart() {
     if (gunsOwnedData.length >= 1) {
       return (<Bar options={gunsOwnedChartOptions} data={gunsOwnedChartData}></Bar>);
@@ -187,6 +214,9 @@ function Explore() {
           <h3>Gun Deaths</h3>
           {renderGunDeathsChart()}
         </div>
+      </div>
+      <div className='d-flex flex-row justify-content-around w-75 mt-4'>
+      {renderProhibitons()}
       </div>
 
     </div>
