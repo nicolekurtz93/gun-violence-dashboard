@@ -1,9 +1,10 @@
 
 import axios from 'axios';
 import $ from 'jquery'
+const proxyUrl = "https://proxy.cors.sh/"
 
 export async function fetchCountryId() {
-    const url = `https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw`;
+    const url = `${proxyUrl}https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw`;
     return axios.get(url)
         .then(result => {
             const finalResult = result.data.locations;
@@ -19,7 +20,7 @@ export async function fetchPrivatelyOwnedFireArms(countryIdList, category) {
     let promises = []
     await countryIdList.forEach(async countryId => {
 
-        const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=${category}&location_id=${parseInt(countryId)}&format=raw`;
+        const url = `${proxyUrl}https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=${category}&location_id=${parseInt(countryId)}&format=raw`;
         let response = axios.get(url)
             .then(result => {
                 let finalResult = cleanUpEndpointDataForLineChart(result.data.result);
