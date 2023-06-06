@@ -16,12 +16,10 @@ export async function fetchStateGrade(stateId) {
     const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=grading_state_gun_laws&location_id=${stateId}&format=raw`;
     return await axios.get(url)
         .then(result => {
-            console.log(result)
             const finalResult = result.data.result;
             return (finalResult);
         })
         .then(result => {
-            console.log(result)
             const finalResult = result.columnValue.split('')[1];
             return (finalResult)
         })
