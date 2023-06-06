@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/gun-violence-dashboard/static/css/main.16c1def5.css",
-    "main.js": "/gun-violence-dashboard/static/js/main.0acd393c.js",
+    "main.js": "/gun-violence-dashboard/static/js/main.24bff09d.js",
     "static/media/loader.gif": "/gun-violence-dashboard/static/media/loader.a1a996746e5e48352c81.gif",
     "index.html": "/gun-violence-dashboard/index.html",
     "main.16c1def5.css.map": "/gun-violence-dashboard/static/css/main.16c1def5.css.map",
-    "main.0acd393c.js.map": "/gun-violence-dashboard/static/js/main.0acd393c.js.map"
+    "main.24bff09d.js.map": "/gun-violence-dashboard/static/js/main.24bff09d.js.map"
   },
   "entrypoints": [
     "static/css/main.16c1def5.css",
-    "static/js/main.0acd393c.js"
+    "static/js/main.24bff09d.js"
   ]
 }
