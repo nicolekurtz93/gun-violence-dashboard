@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-const proxyUrl = "https://proxy.cors.sh/"
+const proxyUrl = "https://cors-proxy.htmldriven.com/?url="
 
 
 
