@@ -1,8 +1,5 @@
 
 import axios from 'axios';
-const proxyUrl = "https://cors-proxy.htmldriven.com/?url="
-
-
 
 export async function fetchAvgFatalityData(yearForData) {
     const url = `https://datausa.io/api/data/?drilldowns=State&measures=Firearm Fatalities&year=${yearForData}`;
@@ -16,7 +13,7 @@ export async function fetchAvgFatalityData(yearForData) {
 }
 
 export async function fetchStateGrade(stateId) {
-    const url = `${proxyUrl}https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=grading_state_gun_laws&location_id=${stateId}&format=raw`;
+    const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=grading_state_gun_laws&location_id=${stateId}&format=raw`;
     return await axios.get(url)
         .then(result => {
             console.log(result)
@@ -32,7 +29,7 @@ export async function fetchStateGrade(stateId) {
 }
 
 export async function fetchProhibitedFireArms(stateId) {
-    const url = `${proxyUrl}https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=prohibited_firearms_and_ammunition&location_id=${stateId}&format=raw`;
+    const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=prohibited_firearms_and_ammunition&location_id=${stateId}&format=raw`;
     return await axios.get(url)
         .then(result => {
             const finalResult = result.data.result;
@@ -46,7 +43,7 @@ export async function fetchProhibitedFireArms(stateId) {
 }
 
 export async function fetchGunOwnershipLevels(stateId) {
-    const url = `${proxyUrl}https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=average_gun_ownership_levels_by_us_state_and_decade&location_id=${stateId}&format=raw`;
+    const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=average_gun_ownership_levels_by_us_state_and_decade&location_id=${stateId}&format=raw`;
     return await axios.get(url)
         .then(result => {
             const finalResult = result.data.result;
@@ -60,7 +57,7 @@ export async function fetchGunOwnershipLevels(stateId) {
 }
 
 export async function fetchTotalNumberOfGunDeaths(stateId) {
-    const url = `${proxyUrl}https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=total_number_of_gun_deaths&location_id=${stateId}&format=raw`
+    const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getcategorydata&category=total_number_of_gun_deaths&location_id=${stateId}&format=raw`
     return await axios.get(url)
         .then(result => {
             const finalResult = result.data.result;
