@@ -128,7 +128,6 @@ function Homepage() {
 
     async function setBarChart(stateId) {
         const result = await fetchTotalNumberOfGunDeaths(stateId);
-        console.log(result)
 
         if (result === undefined) {
             $('.chart-div').html('<p class="text-danger">API Call Failed - No chart Available</p>')
@@ -159,7 +158,7 @@ function Homepage() {
     async function setGradeForState(stateId) {
         let result = await fetchStateGrade(stateId);
         if (result === undefined) {
-            result = 'API call failed'
+            result = 'API Call Failed'
         }
         $('.card-gun-grade')
             .children('p.detail-header').text(`Giffords State Gun Law Grade:`);
@@ -170,7 +169,7 @@ function Homepage() {
     async function setOwnershipDataForState(stateId) {
         let result = await fetchGunOwnershipLevels(stateId);
         if (result === undefined) {
-            result = 'API call failed';
+            result = 'API Call Failed';
             $('.card-household')
                 .children('.detail-text')
                 .text(`${result}`)
@@ -187,7 +186,7 @@ function Homepage() {
     async function setProhibitedDataForState(stateId) {
         let result = await fetchProhibitedFireArms(stateId);
         if (result === undefined) {
-            result = 'API call failed'
+            result = 'API Call Failed'
         }
         $('.card-prohibited')
             .children('.detail-header')
