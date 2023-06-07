@@ -53,7 +53,13 @@ function CompareCountries(props) {
                 $('.no-data')
                     .append(`<p class='font-italic text-danger'>${emptyData.join(', ')} did not have data</p>`)
             }
-            setChartData(tempchartData)
+
+            if (data.length === 0) {
+                setChartData(undefined);
+            } else {
+                setChartData(tempchartData);
+            }
+            
         }
     }, [endpointData])
 
