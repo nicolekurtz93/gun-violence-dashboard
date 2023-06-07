@@ -30,7 +30,6 @@ function CompareCountries(props) {
 
     useEffect(() => {
         SetChartOptions();
-        console.log(endpointData)
         if (endpointData !== null) {
             $('.no-data p').remove();
             let data = []
