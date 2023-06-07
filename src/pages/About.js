@@ -22,10 +22,11 @@ function About() {
                 </p>
                 <p>
                     On the Explore page, users can select a country from a searchable dropdown, which generates of page
-                    of graphs about that country’s gun ownership, gun homicides, and gun violence over time.
+                    of graphs about that country’s gun ownership, gun homicides, and other statistics over time.
                 </p>
                 <p>
-                    The Compare page allows users to see the 5 highest ranked and 5 lowest ranked countries per category.
+                    The Compare page allows users to select any number of countries, and then render a graph comparing 
+                    countries on one of several possible categories.
                     This page allows users to see how countries compare on gun issues.
                 </p>
                 <p>The data for the United States map was provided by
