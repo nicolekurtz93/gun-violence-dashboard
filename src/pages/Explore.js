@@ -120,7 +120,6 @@ function Explore() {
       .get(prohibitedFirearmsUrl)
       .then((response) => {
         const cleanedData = cleanData(response.data.result.columnValue)
-        // console.log(cleanedData)
         setProhibitedFirearms(cleanedData[0]);
       })
       .catch((error) => {
@@ -185,8 +184,7 @@ function Explore() {
           years = cleanedData[0];
           data = []
         }
-        console.log(years)
-        console.log(data)
+
         setFemaleDeathsYears(years);
         setFemaleDeathsData(data);
 
@@ -218,8 +216,7 @@ function Explore() {
           years = cleanedData[0];
           data = []
         }
-        console.log(years)
-        console.log(data)
+
         setMaleDeathsYears(years);
         setMaleDeathsData(data);
 
@@ -444,52 +441,52 @@ function Explore() {
         isSearchable
       />
       <div className='d-flex flex-row justify-content-center w-75 mt-4'>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           {renderGunsOwnedChart()}
         </div>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           <h3>Gun Ownership</h3>
           <p dangerouslySetInnerHTML={{ __html: gunsOwnedGlossary }}></p>
         </div>
 
       </div>
       <div className='d-flex flex-row justify-content-center w-75 mt-4'>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           <h3>Gun Deaths</h3>
           <p dangerouslySetInnerHTML={{ __html: gunDeathsGlossary }}></p>
         </div>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
 
           {renderGunDeathsChart()}
         </div>
 
       </div>
       <div className='d-flex flex-row justify-content-center w-75 mt-4'>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
 
           {renderProhibitons()}
         </div>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           <h3>Prohitbited Firearms and Ammunition</h3>
           <p dangerouslySetInnerHTML={{ __html: prohibitionsGlossary }}></p>
         </div>
       </div>
 
       <div className='d-flex flex-row justify-content-center w-75 mt-4'>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           <h3>Small Arms Manufactured</h3>
           <p dangerouslySetInnerHTML={{ __html: smallArmsGlossary }}></p>
         </div>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
 
           {renderSmallArmsChart()}
         </div>
       </div>
       <div className='d-flex flex-row justify-content-center w-75 mt-4'>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           {renderGenderDeathsChart()}
         </div>
-        <div className='w-25 m-4'>
+        <div className='w-50 m-4'>
           <h3>Gun Deaths by Gender</h3>
           <h4>Female</h4>
           <p dangerouslySetInnerHTML={{ __html: femaleDeathsGlossary }}></p>
