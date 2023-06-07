@@ -13,13 +13,18 @@ function CompareCountries(props) {
     let [chartOptions, setChartOptions] = useState(undefined);
 
     useEffect(() => {
-        if ($('#country_ids options').length === 0) {
-            countryIds.forEach((value, key) => {
-                $('#country_ids').append($('<option>', {
-                    value: key,
-                    text: value
-                }))
-            })
+        try {
+            if ($('#country_ids options').length === 0) {
+                countryIds.forEach((value, key) => {
+                    $('#country_ids').append($('<option>', {
+                        value: key,
+                        text: value
+                    }))
+                })
+            }
+        } catch (error) {
+            console.error(error);
+            $('.alert').html('<p class="text-danger">*Not able to connect to API</p>')
         }
     }, [countryIds]);
 
@@ -127,9 +132,11 @@ function CompareCountries(props) {
     }
     return (
         <>
-            <div className="m-4 d-flex justify-content-center">
+            <div className="m-4 d-flex flex-column align-items-center justify-content-center">
                 <h1 className="">Compare Countries</h1>
+                <div className="alert"></div>
             </div>
+            
             <div className="dropdown d-flex justify-content-center align-center">
                 <label htmlFor="chartCategory" className="form-input align-self-center">Select Category:</label>
                 <select className="form-control w-25 m-2" name="chartCategory" id="chartCategory" onChange={handleCategorySelect} >
