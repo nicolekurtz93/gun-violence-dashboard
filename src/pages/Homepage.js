@@ -15,7 +15,6 @@ import states from '../constants/map_constants';
 import stateIds from "../constants/state_ids";
 import { fetchAvgFatalityData, fetchStateGrade, fetchGunOwnershipLevels, fetchProhibitedFireArms, fetchTotalNumberOfGunDeaths } from '../pages/Homepage.service'
 import $ from 'jquery';
-import ReactDom from 'react-dom';
 import './styles/homepage.css';
 
 ChartJS.register(
@@ -130,17 +129,22 @@ function Homepage() {
     async function setBarChart(stateId) {
         const result = await fetchTotalNumberOfGunDeaths(stateId);
 
-        let labels = Array.from(result.keys()).reverse();
-        let data = Array.from(result.values()).reverse();
-        let chartData = {
-            labels: labels,
-            datasets: [{
-                label: null,
-                data: data,
-                backgroundColor: 'rgba(113, 222, 77, 1)',
-            }]
+        if (result === undefined) {
+            $('.chart-div').html('<p class="text-danger">API Call Failed - No chart Available</p>')
+        } else {
+            let labels = Array.from(result.keys()).reverse();
+            let data = Array.from(result.values()).reverse();
+            let chartData = {
+                labels: labels,
+                datasets: [{
+                    label: null,
+                    data: data,
+                    backgroundColor: 'rgba(113, 222, 77, 1)',
+                }]
+            }
+            setBarChartData(chartData);
         }
-        setBarChartData(chartData);
+
     }
 
     function setStateGunPolicyLink(gunLawUrl, stateName) {
@@ -152,7 +156,10 @@ function Homepage() {
     }
 
     async function setGradeForState(stateId) {
-        const result = await fetchStateGrade(stateId);
+        let result = await fetchStateGrade(stateId);
+        if (result === undefined) {
+            result = 'API Call Failed'
+        }
         $('.card-gun-grade')
             .children('p.detail-header').text(`Giffords State Gun Law Grade:`);
         $('.card-gun-grade')
@@ -160,23 +167,33 @@ function Homepage() {
     }
 
     async function setOwnershipDataForState(stateId) {
-        const results = await fetchGunOwnershipLevels(stateId);
-        $('.card-household')
-            .children('.detail-header')
-            .text(`\nPercentage of households with a gun: `);
-        results.forEach(result_2 => $('.card-household')
-            .children('.detail-text')
-            .text(`${result_2}`));
+        let result = await fetchGunOwnershipLevels(stateId);
+        if (result === undefined) {
+            result = 'API Call Failed';
+            $('.card-household')
+                .children('.detail-text')
+                .text(`${result}`)
+        } else {
+            $('.card-household')
+                .children('.detail-header')
+                .text(`\nPercentage of households with a gun: `);
+            result.forEach(result_2 => $('.card-household')
+                .children('.detail-text')
+                .text(`${result_2}`));
+        }
     }
 
     async function setProhibitedDataForState(stateId) {
-        const results = await fetchProhibitedFireArms(stateId);
+        let result = await fetchProhibitedFireArms(stateId);
+        if (result === undefined) {
+            result = 'API Call Failed'
+        }
         $('.card-prohibited')
             .children('.detail-header')
             .text(`\nProhibited Firearm and Ammunition: `);
         $('.card-prohibited')
             .children('.detail-text')
-            .text(`${results}`);
+            .text(`${result}`);
     }
 
     function cleanPreviousData() {
