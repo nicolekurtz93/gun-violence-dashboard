@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": false,
+  "proxy": "https://www.gunpolicy.org",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@types/react-select": "^5.0.1",

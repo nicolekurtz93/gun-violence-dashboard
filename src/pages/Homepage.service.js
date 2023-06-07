@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+
 export async function fetchAvgFatalityData(yearForData) {
     const url = `https://datausa.io/api/data/?drilldowns=State&measures=Firearm Fatalities&year=${yearForData}`;
     try {

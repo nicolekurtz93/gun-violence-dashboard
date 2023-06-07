@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Homepage from "./Homepage";
 import Explore from "./Explore";
 import Compare from "./Compare";
@@ -10,40 +10,39 @@ import CompareCountries from "./CompareCountries";
 
 
 export const Navbar = (props) => {
-    const {countryIds} = props;
+    const { countryIds } = props;
 
     return (
-        <><nav className="navbar navbar-expand navbar-light text-align-center bg-primary">
-            <ul className="navbar-nav d-flex flex-wrap">
-                <li className="logo">
-                    <a className="nav-link text-white font-weight-bold" href="/">Gun Violence Dashboard</a>
-                </li>
-                <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/">Home</a>
-                </li>
-                <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/explore">Explore</a>
-                </li>
-                <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/compare">Compare</a>
-                </li>
-                <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/compare-countries">Compare Countries</a>
-                </li>
-                <li className="nav-item p-2">
-                    <a className="nav-link text-white font-weight-bold" href="/about">About</a>
-                </li>
-            </ul>
-        </nav>
-            <BrowserRouter>
-                <Routes>
-                    <Route title='Homepage' path='/' element={<Homepage />} />
-                    <Route title='Explore' path='/explore' element={<Explore />} />
-                    <Route title='Compare' path='/compare' element={<Compare />} />
-                    <Route title='Compare-Countries' path='/compare-countries' element={<CompareCountries countryIds={countryIds} />} />
-                    <Route title='About' path='/about' element={<About />} />
-                </Routes>
-            </BrowserRouter></>
+        <><BrowserRouter>
+            <nav className="navbar navbar-expand navbar-light text-align-center bg-primary align-items-center">
+                <ul className="navbar-nav d-flex flex-wrap align-items-center text-align-center">
+
+                    <li className="p-2 d-flex align-content-center">
+                        <div className="d-flex text-align-center align-items-center text-white font-weight-bold">
+                            Gun Violence Dashboard
+                        </div>
+                    </li>
+                    <li className="nav-item p-2">
+                        <Link className="nav-link text-white font-weight-bold" to="/">Home</Link>
+                    </li>
+                    <li className="nav-item p-2">
+                        <Link className="nav-link text-white font-weight-bold" to="/explore/">Explore</Link>
+                    </li>
+                    <li className="nav-item p-2">
+                        <Link className="nav-link text-white font-weight-bold" to="/compare-countries/">Compare Countries</Link>
+                    </li>
+                    <li className="nav-item p-2">
+                        <Link className="nav-link text-white font-weight-bold" to="/about/">About</Link>
+                    </li>
+                </ul>
+            </nav>
+            <Routes>
+                <Route title='Homepage' path='/' index element={<Homepage />} />
+                <Route title='Explore' path='/explore/' element={<Explore />} />
+                <Route title='Compare-Countries' path='/compare-countries/' element={<CompareCountries countryIds={countryIds} />} />
+                <Route title='About' path='/about/' element={<About />} />
+            </Routes>
+        </BrowserRouter></>
     );
 };
 

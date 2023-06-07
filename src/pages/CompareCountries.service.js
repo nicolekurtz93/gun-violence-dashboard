@@ -3,7 +3,7 @@ import axios from 'axios';
 import $ from 'jquery'
 
 export async function fetchCountryId() {
-    const url = `https://www.gunpolicy.org/index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw`;
+    const url = `index.php?option=com_api&app=gpodatapage&clientid=306&key=b7bb356715bf99d6d04e75d266d689db&resource=getlocations&format=raw`;
     return axios.get(url)
         .then(result => {
             const finalResult = result.data.locations;
